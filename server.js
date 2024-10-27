@@ -11,6 +11,10 @@ const PORT = process.env.PORT || 3000;
 app.use(cors()); 
 app.use(bodyParser.json()); 
 
+// Array untuk menyimpan lokasi
+let locations = [];
+
+// Endpoint untuk menerima data lokasi dari AR.js
 app.post('/api/location', (req, res) => {
   const { currentLat, currentLon, latitude, longitude, distance, isArrive } = req.body;
 
@@ -23,9 +27,23 @@ app.post('/api/location', (req, res) => {
     isArrive
   });
 
-  // Lakukan sesuatu dengan data, seperti menyimpannya ke database atau mengirimnya ke dashboard
+  // Simpan data lokasi ke dalam array
+  locations.push({
+    currentLat,
+    currentLon,
+    latitude,
+    longitude,
+    distance,
+    isArrive,
+  });
 
   res.json({ message: 'Data received successfully!' });
+});
+
+// Endpoint untuk mendapatkan data lokasi
+app.get('/api/locations', (req, res) => {
+  // Mengembalikan semua data lokasi yang telah disimpan
+  res.json(locations);
 });
 
 // Jalankan server
